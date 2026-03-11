@@ -15,6 +15,23 @@ type ClipInfo struct {
 	Name  string  `json:"name"`
 }
 
+func (c *ClipInfo) GetClipLength() (length float64, err error) {
+	if c == nil {
+		return 0, fmt.Errorf("clip info is nil")
+	}
+
+	if c.End < c.Start {
+		return 0, fmt.Errorf(
+			"invalid clip range: end (%f) is before start (%f)",
+			c.End,
+			c.Start,
+		)
+	}
+	length = c.End - c.Start
+
+	return length, nil
+}
+
 type CommandExecutor interface {
 	ExecCommand(command string) (*internal.Response, error)
 }
